@@ -16,5 +16,5 @@ public class LandingPageScreen {
 
     @AndroidFindBy(accessibility="App")
     @iOSXCUITFindBy(xpath="")
-    protected WebElement AppButton;
+    protected WebElement appButton;
 }

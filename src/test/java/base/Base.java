@@ -9,13 +9,22 @@ import io.appium.java_client.remote.MobileCapabilityType;
 import io.appium.java_client.service.local.AppiumDriverLocalService;
 import io.appium.java_client.service.local.AppiumServiceBuilder;
 import io.appium.java_client.service.local.flags.GeneralServerFlag;
+import org.openqa.selenium.NoSuchElementException;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
 import org.openqa.selenium.remote.DesiredCapabilities;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.FluentWait;
+import org.openqa.selenium.support.ui.Wait;
+import org.openqa.selenium.support.ui.WebDriverWait;
+
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.ServerSocket;
 import java.net.URL;
+import java.time.Duration;
 import java.util.HashMap;
 import java.util.Properties;
 
@@ -157,4 +166,43 @@ public class Base {
 
 
 }
+
+        public void waitForVisibility(WebElement e)
+        {
+                WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(70));
+                wait.until(ExpectedConditions.visibilityOf(e));
         }
+
+        public void waitForExplicitVisibility(WebElement e){
+                Wait<WebDriver> wait = new FluentWait<WebDriver>(driver)
+                        .withTimeout(Duration.ofSeconds(30))
+                        .pollingEvery(Duration.ofSeconds(5))
+                        .ignoring(NoSuchElementException.class);
+                wait.until(ExpectedConditions.visibilityOf(e));
+        }
+
+        public void clear(WebElement e) {
+                waitForVisibility(e);
+                e.clear();
+        }
+
+        public void click(WebElement e) {
+                waitForVisibility(e);
+                e.click();
+        }
+
+        public void sendKeys(WebElement e, String txt) {
+                waitForVisibility(e);
+                e.sendKeys(txt);
+        }
+
+        public String getAttribute(WebElement e, String attr) {
+                waitForVisibility(e);
+                return(e.getAttribute(attr));
+        }
+
+        public void quitDriver()
+        {
+                driver.quit();
+        }
+}
