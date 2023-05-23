@@ -12,6 +12,10 @@
     <!--            <parameter name="chromeDriverPort" value="11000" />        -->
           <classes>
               <class name="testCases.ToggleTab"/>
+              <class name ="testCases.addTabs"/>
+              <class name = "testCases.addMultipleTabs"/>
+              <class name = "testCases.updateTabCount"/>
+              <class name = "testCases.removeAllTabs"/>
           </classes>
       </test>
   <!--

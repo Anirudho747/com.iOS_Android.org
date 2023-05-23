@@ -47,4 +47,8 @@ public class ActionBarTabsSteps extends ActionBarTabsScreen {
         return bs.getAttribute(textInTab,"text");
     }
 
+    public int getTabCount()
+    {
+        return listofTabs.size();
+    }
 }

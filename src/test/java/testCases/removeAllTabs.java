@@ -1,6 +1,7 @@
 package testCases;
 
 import base.Base;
+import org.testng.Assert;
 import org.testng.annotations.*;
 import testSteps.ActionBarSteps;
 import testSteps.ActionBarTabsSteps;
@@ -9,7 +10,7 @@ import testSteps.LandingPageSteps;
 
 import java.lang.reflect.Method;
 
-public class ToggleTab {
+public class removeAllTabs {
 
     LandingPageSteps lps;
     AppButtonSteps appButtonSteps;
@@ -46,15 +47,26 @@ public class ToggleTab {
         bs.quitDriver();
     }
 
-    @Test(priority = 2)
-    public void tapToggleButton()
-    {
+    @Test()
+    public void add4Tabs() {
         lps.clickContinue();
         lps.clickOk();
         lps.clickAppOption();
         appButtonSteps.clickActionBar();
         actionBarSteps.clickActionBarTabs();
         actionBarTabsSteps.clickToggleTab();
+        actionBarTabsSteps.clickAddNewTab();
+        actionBarTabsSteps.clickAddNewTab();
+        actionBarTabsSteps.clickAddNewTab();
+        actionBarTabsSteps.clickAddNewTab();
+        Assert.assertEquals(actionBarTabsSteps.getTabCount(),4);
     }
+
+    @Test()
+    public void removeAllTabs() {
+        actionBarTabsSteps.clickRemoveAllTabs();
+        Assert.assertEquals(actionBarTabsSteps.getTabCount(),0);
+    }
+
 
 }
