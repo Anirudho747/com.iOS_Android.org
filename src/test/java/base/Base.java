@@ -36,6 +36,7 @@ public class Base {
         private DesiredCapabilities dc;
         private URL url;
         private String propFileName;
+        private String appLocation;
         protected static FileInputStream fis;
 
         public void setDriver(AppiumDriver driver) {
@@ -105,38 +106,39 @@ public class Base {
                 dc = new DesiredCapabilities();
                 props = new Properties();
                 propFileName = System.getProperty("user.dir")+"/src/test/resources/Global.properties";
+                appLocation = System.getProperty("user.dir") + "/src/test/resources/ApiDemos.apk";
                 fis = new FileInputStream(propFileName);
+                props.load(fis);
 
-                switch (platformName)
-                {
+                switch (platformName) {
                         case "Android":
-                                try
-                                {
+
                                         dc.setCapability(AndroidMobileCapabilityType.PLATFORM_NAME, platformName);
                                         dc.setCapability(MobileCapabilityType.AUTOMATION_NAME, props.getProperty("androidAutomationName"));
                                         dc.setCapability(MobileCapabilityType.DEVICE_NAME, deviceName);
-                                        dc.setCapability(MobileCapabilityType.APP, "applocation");
+                                        dc.setCapability(MobileCapabilityType.APP, appLocation);
                                         dc.setCapability(AndroidMobileCapabilityType.AUTO_GRANT_PERMISSIONS, true);
-                                        dc.setCapability(AndroidMobileCapabilityType.APP_PACKAGE, props.getProperty("androidPackageName"));
+                                        dc.setCapability(AndroidMobileCapabilityType.APP_PACKAGE, props.getProperty("androidAppPackage"));
                                         dc.setCapability(AndroidMobileCapabilityType.APP_ACTIVITY, props.getProperty("androidAppActivity"));
 
-                                        if (emulator.equalsIgnoreCase("true")) {
+                                        if (emulator.equalsIgnoreCase("true"))
+                                        {
                                                 dc.setCapability("avd", deviceName);
-                                        } else {
+                                        }
+                                        else
+                                        {
                                                 dc.setCapability(MobileCapabilityType.UDID, props.getProperty("androidUDID"));
                                         }
-
+                                        System.out.println("Capabilities Set");
                                         url = new URL("http://127.0.0.1:4723/wd/hub");
+                                        System.out.println("URL assigned");
                                         driver = new AndroidDriver(url, dc);
-                                } catch (MalformedURLException e)
-                                {
-                                        e.printStackTrace();
-                                }
+                                        System.out.println("Android driver assigned");
+
                                 break;
 
                         case "iOS":
-                             try
-                             {
+
                                         dc.setCapability(IOSMobileCapabilityType.PLATFORM_NAME, platformName);
                                         dc.setCapability(MobileCapabilityType.AUTOMATION_NAME, props.getProperty("iOSAutomationName"));
                                         dc.setCapability(MobileCapabilityType.DEVICE_NAME, deviceName);
@@ -152,18 +154,14 @@ public class Base {
 
                                         url = new URL("http://127.0.0.1:4723/wd/hub");
                                         driver = new IOSDriver(url, dc);
-                             }       catch (MalformedURLException e)
-                             {
-                                        e.printStackTrace();
-                             }
+
                                 break;
 
-                        default :
+                        default:
                                 throw new Exception("Invalid platform! =");
-
-
-        }
-
+                }
+                                setDriver(driver);
+                                String sessionId = driver.getSessionId().toString();
 
 }
 

@@ -40,6 +40,12 @@ public class ToggleTab {
         System.out.println("+++++++++ "+m.getName()+"  ++++++++++++");
     }
 
+    @AfterClass
+    public void afterClass()
+    {
+        bs.quitDriver();
+    }
+
     @Test(priority = 2)
     public void loginSuccess()
     {
