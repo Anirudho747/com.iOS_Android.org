@@ -1,5 +1,9 @@
 package base;
 
+import com.aventstack.extentreports.ExtentReports;
+import com.aventstack.extentreports.ExtentTest;
+import com.aventstack.extentreports.reporter.ExtentSparkReporter;
+import com.aventstack.extentreports.reporter.configuration.Theme;
 import io.appium.java_client.AppiumDriver;
 import io.appium.java_client.android.AndroidDriver;
 import io.appium.java_client.ios.IOSDriver;
@@ -26,6 +30,7 @@ import java.net.ServerSocket;
 import java.net.URL;
 import java.time.Duration;
 import java.util.HashMap;
+import java.util.Map;
 import java.util.Properties;
 
 public class Base {
@@ -37,7 +42,34 @@ public class Base {
         private URL url;
         private String propFileName;
         private String appLocation;
+        protected static String dateTime;
         protected static FileInputStream fis;
+        public static ExtentReports extent;
+        public static ExtentSparkReporter sparkAll ;
+        static Map<Integer, ExtentTest> extentTestMap = new HashMap();
+
+    public static ExtentReports getReporter() {
+        if (extent == null) {
+            extent = new ExtentReports();
+            sparkAll = new ExtentSparkReporter("spark/SparkAll.html");
+            sparkAll.config().setDocumentTitle("Om Prakash Chapter 157");
+            sparkAll.config().setReportName("https://www.extentreports.com/docs/versions/5/java/index.html");
+            sparkAll.config().setTheme(Theme.DARK);
+            extent.attachReporter(sparkAll);
+        }
+            return extent;
+    }
+
+    public static ExtentTest getTest() {
+        return (ExtentTest) extentTestMap.get((int) (long) (Thread.currentThread().getId()));
+    }
+
+    public static ExtentTest startTest(String testName, String desc)
+    {
+        ExtentTest test = getReporter().createTest(testName, desc);
+        extentTestMap.put((int) (long) (Thread.currentThread().getId()), test);
+        return test;
+    }
 
         public void setDriver(AppiumDriver driver) {
                 this.driver = driver;
@@ -165,7 +197,13 @@ public class Base {
 
 }
 
-        public void waitForVisibility(WebElement e)
+        public String getDateTime()
+        {
+            return dateTime;
+        }
+
+
+    public void waitForVisibility(WebElement e)
         {
                 WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(70));
                 wait.until(ExpectedConditions.visibilityOf(e));
